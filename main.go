@@ -8,22 +8,27 @@ import (
 )
 
 func main () {
+  // Creating a Grayfox Router instance
   router := grayfox.NewRouter()
-  
-  // Adding a simple controller and registering the route
-  controller := grayfox.NewController(*router)
-  controller.Route("/", "GET", func(rw http.ResponseWriter, req *http.Request){
+
+  // Adding a "/" (root) controller and it's handler.
+  rootController := grayfox.NewController(*router)
+  rootController.Route("/", "GET", func(rw http.ResponseWriter, req *http.Request){
     fmt.Println("Hello World!")
   })
 
-  // Adding goobye controller and registering "/goodbye" route
+  // Adding "goobye" controller and it' handler
   goodByeController := grayfox.NewController(*router)
-  goodByeController.Route("/goodbye", "GET", func(rw http.ResponseWriter, req *http.Request){
+  goodByeController.Route("/", "GET", func(rw http.ResponseWriter, req *http.Request){
     fmt.Println("GoodBye World!")
   })
+  goodByeController.Route("/sing", "GET", func(rw http.ResponseWriter, req *http.Request){
+    fmt.Println("I'm no good at goodbyes...")
+  })
+
 
   // Registering Controllers
-  router.Route("/", *controller)
+  router.Route("/", *rootController)
   router.Route("/goodbye", *goodByeController)
 
   // Initiating the Grayfox App
